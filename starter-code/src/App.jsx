@@ -1,19 +1,45 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+// import PorductRow from "./components/ProductRow"; 
+import FilterableProductTable from './components/FilterableProductTable';
+import SearchBar from "./components/SearchBar";
+import data from './data.json';
 
-export default class App extends Component {
+class App extends Component {
+  state = {
+    data: data.data,
+    query: ""
+  };
+
+  setQuery = query => {
+    this.setState({
+      query
+    });
+  };
+
   render() {
+    
+    const filteredProducts = this.state.data
+    .filter(product => {
+      return product.name
+        .toLowerCase()
+        .includes(this.state.query.toLowerCase());
+    })
+
+    // console.log(this.state.data)
+    // console.log(filteredProducts)
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <h1>IronStore</h1>
+        
+        <SearchBar handleQuery={this.setQuery} query={this.state.query} />
+        
+        <FilterableProductTable products={filteredProducts}/>
+
+
       </div>
     );
   }
 }
+
+export default App;
